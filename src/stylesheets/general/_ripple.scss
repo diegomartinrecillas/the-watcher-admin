@@ -1,0 +1,56 @@
+@import '../base/colors';
+
+$ripple-width: 12px;
+
+@keyframes uil-ripple {
+  0% {
+    height: 0;
+    margin: 0;
+    opacity: 0;
+    width: 0;
+  }
+
+  33% {
+    height: 44%;
+    margin: -22% 0 0 -22%;
+    opacity: 1;
+    width: 44%;
+  }
+
+  100% {
+    height: 88%;
+    margin: -44% 0 0 -44%;
+    opacity: 0;
+    width: 88%;
+  }
+}
+
+.uil-ripple-css {
+  background: none;
+  height: 200px;
+  position: relative;
+  width: 200px;
+
+  div {
+    animation: uil-ripple 1s ease-out infinite;
+    border-radius: 50%;
+    border-style: solid;
+    border-width: $ripple-width;
+    height: 0;
+    left: -$ripple-width;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 0;
+  }
+
+  div:nth-of-type(1) {
+    border-color: $primary-color;
+  }
+
+  div:nth-of-type(2) {
+    animation-delay: .5s;
+    border-color: $accent-color;
+  }
+}
