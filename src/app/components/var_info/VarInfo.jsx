@@ -10,7 +10,7 @@ import Info from 'material-ui/svg-icons/action/info';
 import Divider from 'material-ui/Divider';
 import Card from 'material-ui/Card';
 // Components
-import ArrowBack from 'app/components/misc/ArrowBack';
+import Subtitle from 'app/components/misc/Subtitle';
 // Colors
 import { primary, accent } from 'app/styles/colors';
 
@@ -34,7 +34,7 @@ const styles = {
     devicesContainer: {},
     button: {
         margin: 12,
-        width: 150,
+        width: 170,
         height: 50
     },
     alignment: {
@@ -42,19 +42,8 @@ const styles = {
     },
     title: {
         fontSize: 12,
-        fontWeight: 500,
+        fontWeight: 400,
         color: primary
-    },
-    subtitle: {
-        textAlign: 'left',
-        color: '#424242',
-        fontSize: 24
-    },
-    underline: {
-        border: 0,
-        height: 1,
-        background: '#333',
-        backgroundImage: 'linear-gradient(to right, #ccc, #333, #ccc)'
     },
     legend: {
         color: 'grey',
@@ -87,15 +76,17 @@ export default class VarInfo extends React.Component {
         hashHistory.push(`/app/devices/${target}`)
     }
 
+    handleAddDevice = () => {
+        let target = this.props.params.varKey;
+        hashHistory.push(`/app/addDevice/${target}`);
+    }
+
     render() {
         return (
             <div>
                 <div style={styles.mainContainer}>
                     <div style={styles.innerContainer}>
-                        <section style={styles.subtitle}>
-                            Variable
-                        </section>
-                        <hr style={styles.underline}/>
+                        <Subtitle text="Variable"/>
                         <div style={styles.dataContainer}>
                             <Card style={styles.alignment}>
                                 <section style={styles.legend}>
@@ -129,10 +120,7 @@ export default class VarInfo extends React.Component {
                                 </section>
                             </Card>
                         </div>
-                        <section style={styles.subtitle}>
-                            Dispositivos
-                        </section>
-                        <hr style={styles.underline}/>
+                        <Subtitle text="Dispositivos"/>
                         <div style={styles.devicesContainer}>
                             <Card>
                                 <List style={{textAlign: 'left'}}>
@@ -147,6 +135,12 @@ export default class VarInfo extends React.Component {
                                 </List>
                             </Card>
                         </div>
+                        <RaisedButton
+                            label="Nuevo dispositivo"
+                            primary={true}
+                            style={styles.button}
+                            onClick={this.handleAddDevice}
+                            />
                     </div>
                 </div>
             </div>

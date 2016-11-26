@@ -9,6 +9,8 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 // App Components
+import AddDevice from './add_device/AddDevice';
+import AddVar from './add_var/AddVar';
 import AppShell from './app_shell/AppShell';
 import DeviceInfo from './device_info/DeviceInfo';
 import Error from './error/Error';
@@ -40,6 +42,8 @@ export default class AppRouter extends React.Component {
                             <Route path="/app/home" component={Home}/>
                             <Route path="/app/variables/:varKey" component={VarInfo}/>
                             <Route path="/app/devices/:deviceKey" component={DeviceInfo}/>
+                            <Route path="/app/addVar" component={AddVar}/>
+                            <Route path="/app/addDevice/:varKey" component={AddDevice}/>
                         </Route>
                     </Route>
                     <Route path="*" component={Error}/>

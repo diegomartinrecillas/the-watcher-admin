@@ -10,7 +10,7 @@ import Info from 'material-ui/svg-icons/action/info';
 import Divider from 'material-ui/Divider';
 import Card from 'material-ui/Card';
 // Components
-
+import Subtitle from 'app/components/misc/Subtitle';
 
 const styles = {
     mainContainer: {
@@ -25,24 +25,10 @@ const styles = {
         width: '100%',
         maxWidth: 600
     },
-    buttonContainer: {
-        textAlign: 'right'
-    },
     button: {
         margin: 12,
-        width: 150,
+        width: 170,
         height: 50
-    },
-    subtitle: {
-        textAlign: 'left',
-        color: '#424242',
-        fontSize: 24
-    },
-    underline: {
-        border: 0,
-        height: 1,
-        background: '#333',
-        backgroundImage: 'linear-gradient(to right, #ccc, #333, #ccc)'
     }
 }
 
@@ -81,22 +67,19 @@ export default class Home extends React.Component {
         hashHistory.push(`/app/variables/${target}`);
     }
 
+    handleAddDevice = (target) => {
+        hashHistory.push(`/app/addDevice/${target}`);
+    }
+
+    handleAddVar = () => {
+        hashHistory.push('/app/addVar');
+    }
+
     render() {
         return (
             <div style={styles.mainContainer}>
                 <div style={styles.innerContainer}>
-                    <div style={styles.buttonContainer}>
-                        <RaisedButton
-                            label="Nueva variable"
-                            primary={true}
-                            style={styles.button}
-                            onClick={this.handleNewVariable}
-                            />
-                    </div>
-                    <section style={styles.subtitle}>
-                        Todas las Variables
-                    </section>
-                    <hr style={styles.underline}/>
+                    <Subtitle text="Todas las Variables"/>
                     <Card>
                         <List style={{textAlign: 'left'}}>
                             {variables.map((variable) => (
@@ -108,7 +91,7 @@ export default class Home extends React.Component {
                                         nestedItems={[
                                             <ListItem
                                                 key={1}
-                                                primaryText="Information"
+                                                primaryText="Información"
                                                 leftIcon={<Info />}
                                                 onClick={() => {
                                                     this.handleInfo(variable.key)
@@ -116,8 +99,11 @@ export default class Home extends React.Component {
                                                 />,
                                             <ListItem
                                                 key={2}
-                                                primaryText="Add device"
+                                                primaryText="Agregar Dispositivo"
                                                 leftIcon={<AddCircle />}
+                                                onClick={() => {
+                                                    this.handleAddDevice(variable.key)
+                                                }}
                                                 />
                                         ]}
                                         />
@@ -125,7 +111,12 @@ export default class Home extends React.Component {
                             ))}
                         </List>
                     </Card>
-
+                    <RaisedButton
+                        label="Agregar variable"
+                        primary={true}
+                        style={styles.button}
+                        onClick={this.handleAddVar}
+                        />
                 </div>
             </div>
         );
