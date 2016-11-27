@@ -12,20 +12,17 @@ export default class RootShell extends React.Component {
             isCheckingLoggedIn: null
         }
     }
-    // Store registration
     componentDidMount() {
-        // Register component callback and execute it instantly
-        this.LOGIN_STORE_ID = LoginStore.register(this._onChange, false);
-        LoginActions.checkLoggedIn();
+        LoginStore.subscribe(this._onChange);
+        LoginActions.checkLoggedIn.dispatch();
     }
     componentWillUnmount() {
-        // Unregister
-        LoginStore.unregister(this.LOGIN_STORE_ID);
+        LoginStore.unsubscribe(this._onChange);
     }
     // Store callback
     _onChange = () => {
         this.setState({
-            isCheckingLoggedIn: LoginStore.state.get('isCheckingLoggedIn')
+            isCheckingLoggedIn: LoginStore.state.isCheckingLoggedIn
         });
     }
     render() {

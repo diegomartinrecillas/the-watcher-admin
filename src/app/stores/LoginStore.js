@@ -1,49 +1,38 @@
 // Flux
 import Store from 'app/libs/Store';
-import appDispatcher from 'app/dispatcher/AppDispatcher';
-import LOGIN_CONSTANTS from 'app/constants/LoginConstants';
 import LoginActions from 'app/actions/LoginActions';
 // Firebase
 import firebase from 'firebase';
 import { firebaseAuth } from 'app/firebase/firebase';
-// Backbone
-import { Collection, Model } from 'backbone';
 
-const LoginState = Model.extend({
-    defaults: {
-        isLoggedIn: false,
-        isLoggingIn: false,
-        isCheckingLoggedIn: false,
-        isLoginError: false,
-        loginErrorMessage: ''
-    }
-});
-
-const login = LOGIN_CONSTANTS.LOGIN_ACTIONS;
+const DEBUG = false;
 
 class LoginStore extends Store {
 
     constructor() {
-        const DEBUG = false;
-        super('LoginStore', DEBUG);
 
-        this.state = new LoginState();
-        this.state.on('change',this.update, this);
+        super('LOGIN_STORE', DEBUG);
 
-        this.bindActions({
-            [login.CHECK_LOGGED_IN]: this.checkLoggedIn,
-            [login.LOGIN_WITH_EMAIL]: this.loginWithEmail,
-            [login.LOGIN_WITH_FACEBOOK]: this.loginWithFacebook,
-            [login.LOGIN_WITH_GOOGLE]: this.loginWithGoogle,
-            [login.LOGOUT]: this.logout,
-            [login.RESET_ERROR]: this.resetError
-        });
+        this.state = {
+            isLoggedIn: false,
+            isLoggingIn: false,
+            isCheckingLoggedIn: false,
+            isLoginError: false,
+            loginErrorMessage: ''
+        };
+
+        this.listenTo(LoginActions.checkLoggedIn, this.checkLoggedIn);
+        this.listenTo(LoginActions.loginWithEmail, this.loginWithEmail);
+        this.listenTo(LoginActions.loginWithFacebook, this.loginWithFacebook);
+        this.listenTo(LoginActions.loginWithGoogle, this.loginWithGoogle);
+        this.listenTo(LoginActions.logout, this.logout);
+        this.listenTo(LoginActions.resetError, this.resetError);
     }
 
     logout = () => {
         firebaseAuth.signOut()
         .then(() => {
-            this.state.set({'isLoggedIn': false});
+            this.setState({'isLoggedIn': false});
         })
         .catch((error) => {
             this._loginError(error);
@@ -51,15 +40,15 @@ class LoginStore extends Store {
     }
 
     checkLoggedIn = () => {
-        this.state.set({'isCheckingLoggedIn': true});
+        this.setState({'isCheckingLoggedIn': true});
         firebaseAuth.onAuthStateChanged((user) => {
             if (user) {
-                this.state.set({
+                this.setState({
                     'isLoggedIn': true,
                     'isCheckingLoggedIn': false
                 });
             } else {
-                this.state.set({
+                this.setState({
                     'isLoggedIn': false,
                     'isCheckingLoggedIn': false
                 });
@@ -68,14 +57,14 @@ class LoginStore extends Store {
     }
 
     _loginWithProviderPopup = (provider) => {
-        this.state.set({
+        this.setState({
             'isLoggingIn': true,
             'isLoginError': false
         });
 
         firebaseAuth.signInWithPopup(provider)
         .then((result) => {
-            this.state.set({
+            this.setState({
                 'isLoggedIn': true,
                 'isLoginError': false,
                 'isLoggingIn': false
@@ -84,7 +73,7 @@ class LoginStore extends Store {
         .catch((error) => {
             console.log(error);
             this._loginError(error);
-            this.state.set({'isLoggingIn': false});
+            this.setState({'isLoggingIn': false});
         });
     }
 
@@ -102,29 +91,28 @@ class LoginStore extends Store {
         let email = data['email'];
         let password = data['password'];
 
-        this.state.set({
+        this.setState({
             'isLoggingIn': true,
             'isLoginError': false
         });
 
         firebaseAuth.signInWithEmailAndPassword(email, password)
         .then((result) => {
-            this.state.set({
+            this.setState({
                 'isLoggedIn': true,
                 'isLoginError': false,
                 'isLoggingIn': false
             });
-            console.log('should break');
         })
         .catch((error) => {
             this._loginError(error);
-            this.state.set({'isLoggingIn': false});
+            this.setState({'isLoggingIn': false});
         });
 
     }
 
     resetError = () => {
-        this.state.set({
+        this.setState({
             'isLoginError': false,
             'loginErrorMessage': false
         });
@@ -144,7 +132,7 @@ class LoginStore extends Store {
         } else {
             errorMsg = 'Servicio temporalmente no disponible';
         }
-        this.state.set({
+        this.setState({
             'isLoginError': true,
             'loginErrorMessage': errorMsg
         });
@@ -152,6 +140,4 @@ class LoginStore extends Store {
 }
 
 let loginStore = new LoginStore();
-appDispatcher.register(loginStore);
-
 export default loginStore;

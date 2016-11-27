@@ -75,15 +75,13 @@ export default class Login extends React.Component {
             isCheckingLoggedIn: false
         }
     }
-    // Store registration
     componentDidMount() {
-        // Register component callback
-        this.LOGIN_STORE_ID = LoginStore.register(this._onChange);
-        LoginActions.resetError();
+        LoginStore.subscribe(this._onChange);
+        LoginStore.emmitChange();
+        LoginActions.resetError.dispatch();
     }
     componentWillUnmount() {
-        // Unregister
-        LoginStore.unregister(this.LOGIN_STORE_ID);
+        LoginStore.unsubscribe(this._onChange);
     }
     componentDidUpdate() {
         if (this.state.isLoggedIn !== null) {
@@ -96,24 +94,25 @@ export default class Login extends React.Component {
     // Store callback
     _onChange = () => {
         this.setState({
-            isLoginError: LoginStore.state.get('isLoginError'),
-            isLoggedIn: LoginStore.state.get('isLoggedIn'),
-            isLoggingIn: LoginStore.state.get('isLoggingIn'),
-            loginErrorMessage: LoginStore.state.get('loginErrorMessage'),
-            isCheckingLoggedIn: LoginStore.state.get('isCheckingLoggedIn')
+            isLoginError: LoginStore.state.isLoginError,
+            isLoggedIn: LoginStore.state.isLoggedIn,
+            isLoggingIn: LoginStore.state.isLoggingIn,
+            loginErrorMessage: LoginStore.state.loginErrorMessage,
+            isCheckingLoggedIn: LoginStore.state.isCheckingLoggedIn
         });
     }
     // Handlers
 
     handleFacebookLogin = () => {
-        LoginActions.loginWithFacebook();
+        LoginActions.loginWithFacebook.dispatch();
     }
 
     handleGoogleLogin = () => {
-        LoginActions.loginWithGoogle();
+        LoginActions.loginWithGoogle.dispatch();
     }
     // Handle <form> login event
     handleLogin = (event) => {
+        console.log('login');
         // Disable <form> default actions
         event.preventDefault();
         // Validate email and password existance
@@ -123,7 +122,7 @@ export default class Login extends React.Component {
                 let email = this.state.email;
                 let password = this.state.password;
 
-                LoginActions.loginWithEmail({
+                LoginActions.loginWithEmail.dispatch({
                     email: email,
                     password: password,
                 });

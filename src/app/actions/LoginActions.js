@@ -1,38 +1,14 @@
-import LOGIN_CONSTANTS from 'app/constants/LoginConstants';
-import appDispatcher from 'app/dispatcher/AppDispatcher';
+import { createActions }  from 'app/libs/Actions';
 
-const login = LOGIN_CONSTANTS.LOGIN_ACTIONS;
+const DEBUG = false;
 
-export default class LoginActions {
-    static checkLoggedIn() {
-        appDispatcher.dispatch(
-            login.CHECK_LOGGED_IN
-        );
-    }
-    static loginWithEmail(data) {
-        appDispatcher.dispatch(
-            login.LOGIN_WITH_EMAIL,
-            data
-        );
-    }
-    static loginWithGoogle() {
-        appDispatcher.dispatch(
-            login.LOGIN_WITH_GOOGLE
-        );
-    }
-    static loginWithFacebook() {
-        appDispatcher.dispatch(
-            login.LOGIN_WITH_FACEBOOK
-        );
-    }
-    static logout() {
-        appDispatcher.dispatch(
-            login.LOGOUT
-        );
-    }
-    static resetError() {
-        appDispatcher.dispatch(
-            login.RESET_ERROR
-        );
-    }
-}
+const LoginActions = createActions([
+    'checkLoggedIn',
+    'loginWithEmail',
+    'loginWithGoogle',
+    'loginWithFacebook',
+    'logout',
+    'resetError'
+], DEBUG);
+
+export default LoginActions;

@@ -58,12 +58,10 @@ export default class AppShell extends React.Component {
         }
     }
     componentDidMount() {
-        // Register component callback and execute instantly
-        this.LOGIN_STORE_ID = LoginStore.register(this._onChange, false);
+        LoginStore.subscribe(this._onChange);
     }
     componentWillUnmount() {
-        // Unregister
-        LoginStore.unregister(this.LOGIN_STORE_ID);
+        LoginStore.unsubscribe(this._onChange);
     }
     componentDidUpdate() {
         if (this.state.isLoggedIn !== null) {
@@ -76,11 +74,11 @@ export default class AppShell extends React.Component {
     // Store callback
     _onChange = () => {
         this.setState({
-            isLoggedIn: LoginStore.state.get('isLoggedIn')
+            isLoggedIn: LoginStore.state.isLoggedIn
         });
     }
     handleLogout = () => {
-        LoginActions.logout();
+        LoginActions.logout.dispatch();
     }
     handleToggle = () => {
         this.setState({
