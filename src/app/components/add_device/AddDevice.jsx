@@ -37,10 +37,13 @@ const styles = {
     legend: {
         color: 'grey',
         paddingTop: 0,
-        paddingLeft: '2%',
-        paddingRight: '2%',
+        paddingLeft: '5%',
+        paddingRight: '5%',
         paddingBottom: '2%',
-        textAlign: 'justify'
+        textAlign: 'justify',
+    },
+    underlineStyle: {
+        borderColor: primary,
     }
 }
 
@@ -69,6 +72,7 @@ export default class AddDevice extends React.Component {
                                     <TextField
                                         floatingLabelText="Nombre"
                                         hintText="Nombre del dispositivo"
+                                        underlineStyle={styles.underlineStyle}
                                         fullWidth={true}/>
                                 </section>
                                 <Divider/>
@@ -76,6 +80,7 @@ export default class AddDevice extends React.Component {
                                     <TextField
                                         floatingLabelText="Descripción"
                                         hintText="Descripción del dispositivo"
+                                        underlineStyle={styles.underlineStyle}
                                         fullWidth={true}/>
                                 </section>
                                 <Divider/>
@@ -83,6 +88,7 @@ export default class AddDevice extends React.Component {
                                     <TextField
                                         floatingLabelText="Zona"
                                         hintText="Zona del dispositivo"
+                                        underlineStyle={styles.underlineStyle}
                                         fullWidth={true}/>
                                 </section>
                             </Card>

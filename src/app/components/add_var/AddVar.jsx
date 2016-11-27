@@ -37,10 +37,13 @@ const styles = {
     legend: {
         color: 'grey',
         paddingTop: 0,
-        paddingLeft: '2%',
-        paddingRight: '2%',
+        paddingLeft: '5%',
+        paddingRight: '5%',
         paddingBottom: '2%',
         textAlign: 'justify'
+    },
+    underlineStyle: {
+        borderColor: primary,
     }
 }
 
@@ -70,6 +73,7 @@ export default class AddVar extends React.Component {
                                     <TextField
                                         floatingLabelText="Nombre"
                                         hintText="Nombre de la variable"
+                                        underlineStyle={styles.underlineStyle}
                                         fullWidth={true}/>
                                 </section>
                                 <Divider/>
@@ -77,6 +81,7 @@ export default class AddVar extends React.Component {
                                     <TextField
                                         floatingLabelText="Descripción"
                                         hintText="Descripción de la variable"
+                                        underlineStyle={styles.underlineStyle}
                                         fullWidth={true}/>
                                 </section>
 

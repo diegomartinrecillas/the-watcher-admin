@@ -34,7 +34,7 @@ const styles = {
     devicesContainer: {},
     button: {
         margin: 12,
-        width: 170,
+        width: 190,
         height: 50
     },
     alignment: {
@@ -136,7 +136,7 @@ export default class VarInfo extends React.Component {
                             </Card>
                         </div>
                         <RaisedButton
-                            label="Nuevo dispositivo"
+                            label="Agregar dispositivo"
                             primary={true}
                             style={styles.button}
                             onClick={this.handleAddDevice}
