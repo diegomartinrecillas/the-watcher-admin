@@ -1,3 +1,5 @@
+import VariableActions from 'app/actions/VariableActions';
+import VariableStore from 'app/stores/VariableStore';
 // React
 import React from 'react';
 // React Router
@@ -32,23 +34,28 @@ const styles = {
     }
 }
 
-const variables = [
-    {
-        name: 'Variable 1',
-        key: 'key_for_variable_1'
-    },
-    {
-        name: 'Variable 2',
-        key: 'key_for_variable_2'
-    }
-]
-
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
+            variables: []
         };
+    }
+
+    componentDidMount() {
+        VariableStore.subscribe(this._onChange);
+        VariableActions.dispatch('getAllVariables');
+    }
+
+    componentWillUnmount() {
+        VariableStore.unsubscribe(this._onChange);
+    }
+
+    _onChange = () => {
+        this.setState({
+            variables: VariableStore.state.allVariables
+        })
     }
 
     handleToggle = () => {
@@ -82,7 +89,7 @@ export default class Home extends React.Component {
                     <Subtitle text="Todas las Variables"/>
                     <Card>
                         <List style={{textAlign: 'left'}}>
-                            {variables.map((variable) => (
+                            {this.state.variables.map((variable) => (
                                 <div key={variable.key}>
                                     <ListItem
                                         primaryText={variable.name}

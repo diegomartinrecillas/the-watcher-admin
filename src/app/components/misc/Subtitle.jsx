@@ -1,6 +1,12 @@
 import React from 'react';
 
 const styles = {
+    container: {
+        paddingTop: '3%',
+        paddingBottom: '1%',
+        paddingLeft: '2%',
+        paddingRight: '2%'
+    },
     subtitle: {
         textAlign: 'left',
         color: '#424242',
@@ -17,10 +23,12 @@ const styles = {
 const Subtitle = (props) => {
     return (
         <div style={props.style} className={props.className}>
+            <div style={styles.container}>
             <section style={styles.subtitle}>
                 {props.text}
             </section>
             <hr style={styles.underline}/>
+            </div>
         </div>
     );
 }

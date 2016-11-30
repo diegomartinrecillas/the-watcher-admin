@@ -11,7 +11,9 @@ import '../stylesheets/main.scss';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
+// Init Stores
 import LoginStore from 'app/stores/LoginStore';
+import VariableStore from 'app/stores/VariableStore';
 
 
 ReactDOM.render(<AppRouter/>, document.getElementById('app'));

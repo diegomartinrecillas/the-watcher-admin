@@ -5,13 +5,9 @@ import LoginActions from 'app/actions/LoginActions';
 import firebase from 'firebase';
 import { firebaseAuth } from 'app/firebase/firebase';
 
-const DEBUG = false;
-
-class LoginStore extends Store {
-
+const LoginStore =  new (class extends Store {
     constructor() {
-
-        super('LOGIN_STORE', DEBUG);
+        super('LOGIN_STORE');
 
         this.state = {
             isLoggedIn: false,
@@ -137,7 +133,6 @@ class LoginStore extends Store {
             'loginErrorMessage': errorMsg
         });
     }
-}
+});
 
-let loginStore = new LoginStore();
-export default loginStore;
+export default LoginStore;

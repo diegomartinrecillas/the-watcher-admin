@@ -63,7 +63,13 @@ class Action extends EventEmitter{
 const createActions = (arr, DEBUG = false) => {
     let actions = {};
     for (let item of arr) {
+        if (item == 'dispatch') {
+            throw `ACTION: dispatch is a reserved word, use another Action name.`
+        }
         actions[item] = new Action(item, DEBUG);
+    }
+    actions.dispatch = (action, ...args) => {
+        actions[action].dispatch(...args);
     }
     return actions;
 }

@@ -112,7 +112,6 @@ export default class Login extends React.Component {
     }
     // Handle <form> login event
     handleLogin = (event) => {
-        console.log('login');
         // Disable <form> default actions
         event.preventDefault();
         // Validate email and password existance

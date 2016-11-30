@@ -1,3 +1,5 @@
+import VariableActions from 'app/actions/VariableActions';
+import VariableStore from 'app/stores/VariableStore';
 // React
 import React from 'react';
 // React Router
@@ -72,6 +74,32 @@ const devices = [
 ]
 
 export default class VarInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            key: '',
+            description: ''
+
+        }
+    }
+
+    componentDidMount() {
+        VariableStore.subscribe(this._onChange);
+        VariableActions.dispatch('getVariable', this.props.params.varKey);
+    }
+
+    componentWillUnmount() {
+        VariableStore.unsubscribe(this._onChange);
+    }
+
+    _onChange = () => {
+        this.setState({
+            name: VariableStore.state.selectedVariable.name,
+            key: VariableStore.state.selectedVariable.key,
+            description: VariableStore.state.selectedVariable.description
+        })
+    }
     handleInfo = (target) => {
         hashHistory.push(`/app/devices/${target}`)
     }
@@ -95,7 +123,7 @@ export default class VarInfo extends React.Component {
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
-                                        Nombre de la variable
+                                        {this.state.name}
                                     </span>
                                 </section>
                                 <Divider/>
@@ -105,7 +133,7 @@ export default class VarInfo extends React.Component {
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
-                                        {this.props.params.varKey}
+                                        {this.state.key}
                                     </span>
                                 </section>
                                 <Divider/>
@@ -115,7 +143,7 @@ export default class VarInfo extends React.Component {
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                        {this.state.description}
                                     </span>
                                 </section>
                             </Card>
