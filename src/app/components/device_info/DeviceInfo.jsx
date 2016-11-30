@@ -1,3 +1,5 @@
+import DeviceActions from 'app/actions/DeviceActions';
+import DeviceStore from 'app/stores/DeviceStore';
 // React
 import React from 'react';
 // Material UI Components
@@ -58,6 +60,31 @@ const styles = {
 }
 
 export default class Device extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            key: '',
+            description: ''
+        }
+    }
+
+    componentDidMount() {
+        DeviceStore.subscribe(this._onChange);
+        DeviceActions.dispatch('getDevice', this.props.params.deviceKey);
+    }
+
+    componentWillUnmount() {
+        DeviceStore.unsubscribe(this._onChange);
+    }
+
+    _onChange = () => {
+        this.setState({
+            name: DeviceStore.state.selectedDevice.name,
+            key: DeviceStore.state.selectedDevice.key,
+            description: DeviceStore.state.selectedDevice.description
+        })
+    }
     render() {
         return (
             <div style={styles.mainContainer}>
@@ -71,7 +98,7 @@ export default class Device extends React.Component {
                                 </span>
                                 <br/>
                                 <span style={styles.entry}>
-                                    Nombre del dispositivo
+                                    {this.state.name}
                                 </span>
                             </section>
                             <Divider/>
@@ -81,7 +108,7 @@ export default class Device extends React.Component {
                                 </span>
                                 <br/>
                                 <span style={styles.entry}>
-                                    {this.props.params.deviceKey}
+                                    {this.state.key}
                                 </span>
                             </section>
                             <Divider/>
@@ -91,7 +118,7 @@ export default class Device extends React.Component {
                                 </span>
                                 <br/>
                                 <span style={styles.entry}>
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                    {this.state.description}
                                 </span>
                             </section>
                         </Card>

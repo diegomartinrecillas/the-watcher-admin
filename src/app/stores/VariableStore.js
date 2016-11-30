@@ -12,7 +12,8 @@ const VariableStore = new (class extends Store {
             isAddingVar: false,
             isAddingVarSuccess: false,
             isAddingVarError: false,
-            addingVarErrorMessage: ''
+            addingVarErrorMessage: '',
+            varKey: ''
         }
 
         this.listenTo(VariableActions['getAllVariables'], this.getAllVariables);
@@ -45,7 +46,6 @@ const VariableStore = new (class extends Store {
             },
             error: (jqXHR, textStatus, errorThrown) => {
                 console.log('Failure: ' + errorThrown);
-
             }
         });
     }
@@ -54,11 +54,9 @@ const VariableStore = new (class extends Store {
         this.setState({
             selectedVariable: this.state.allVariables.find((variable) => variable.key === key)
         })
-        console.log(this.state.selectedVariable);
     }
 
     addNewVariable = (data) => {
-        console.log(data);
         let varName = data.varName;
         let varUnit = data.varUnit;
         let varDescription = data.varDescription;
@@ -80,7 +78,8 @@ const VariableStore = new (class extends Store {
             isAddingVar: true,
             isAddingVarSuccess: false,
             isAddingVarError: false,
-            addingVarErrorMessage: ''
+            addingVarErrorMessage: '',
+            varKey: ''
         });
 
         $.ajax({
@@ -90,11 +89,13 @@ const VariableStore = new (class extends Store {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: (data, textStatus, jqXHR) => {
+                let varKey = data.payload.dataKey;
                 this.setState({
                     isAddingVar: false,
                     isAddingVarSuccess: true,
                     isAddingVarError: false,
-                    addingVarErrorMessage: ''
+                    addingVarErrorMessage: '',
+                    varKey: `Key: varKey`
                 });
             },
             error: (jqXHR, textStatus, errorThrown) => {
@@ -103,7 +104,8 @@ const VariableStore = new (class extends Store {
                     isAddingVar: false,
                     isAddingVarSuccess: false,
                     isAddingVarError: true,
-                    addingVarErrorMessage: 'Something happened'
+                    addingVarErrorMessage: `Error: ${errorThrown}`,
+                    varKey: ''
                 });
             }
         });
@@ -115,7 +117,8 @@ const VariableStore = new (class extends Store {
             isAddingVar: false,
             isAddingVarSuccess: false,
             isAddingVarError: false,
-            addingVarErrorMessage: ''
+            addingVarErrorMessage: '',
+            varKey: ''
         });
     }
 });

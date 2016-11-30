@@ -52,6 +52,7 @@ const styles = {
         borderColor: primary,
     },
     isAddingVar:{},
+    varKey: {},
     addingVarErrorMessage: {},
     isAddingVarSuccess: {},
 }
@@ -91,6 +92,7 @@ export default class AddVar extends React.Component {
         super(props);
         this.state = {
             selectValue: null,
+            varKey: '',
             varName: '',
             varUnit: '',
             varDescription: '',
@@ -116,7 +118,8 @@ export default class AddVar extends React.Component {
             isAddingVar: VariableStore.state.isAddingVar,
             isAddingVarError: VariableStore.state.isAddingVarError,
             addingVarErrorMessage: VariableStore.state.addingVarErrorMessage,
-            isAddingVarSuccess: VariableStore.state.isAddingVarSuccess
+            isAddingVarSuccess: VariableStore.state.isAddingVarSuccess,
+            varKey: VariableStore.state.varKey
         });
     }
 
@@ -231,6 +234,11 @@ export default class AddVar extends React.Component {
                         {this.state.isAddingVarSuccess &&
                             <section>
                                 <p style={styles.isAddingVarSuccess}>Nueva variable agregada con éxito</p>
+                            </section>
+                        }
+                        {this.state.isAddingVarSuccess &&
+                            <section>
+                                <p style={styles.varKey}>{this.state.varKey}</p>
                             </section>
                         }
                         <RaisedButton

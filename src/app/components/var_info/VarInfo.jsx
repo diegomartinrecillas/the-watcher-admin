@@ -1,5 +1,7 @@
 import VariableActions from 'app/actions/VariableActions';
 import VariableStore from 'app/stores/VariableStore';
+import DeviceActions from 'app/actions/DeviceActions';
+import DeviceStore from 'app/stores/DeviceStore';
 // React
 import React from 'react';
 // React Router
@@ -62,42 +64,36 @@ const styles = {
     },
 }
 
-const devices = [
-    {
-        name: 'Device 1',
-        key: 'key_for_device_1'
-    },
-    {
-        name: 'Device 2',
-        key: 'key_for_device_2'
-    }
-]
-
 export default class VarInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             name: '',
             key: '',
-            description: ''
-
+            description: '',
+            devices: []
         }
     }
 
     componentDidMount() {
         VariableStore.subscribe(this._onChange);
         VariableActions.dispatch('getVariable', this.props.params.varKey);
+        DeviceStore.subscribe(this._onChange);
+        DeviceActions.dispatch('resetSelectedDevice');    
+        DeviceActions.dispatch('getAllDevices', this.props.params.varKey);
     }
 
     componentWillUnmount() {
         VariableStore.unsubscribe(this._onChange);
+        DeviceStore.unsubscribe(this._onChange);
     }
 
     _onChange = () => {
         this.setState({
             name: VariableStore.state.selectedVariable.name,
             key: VariableStore.state.selectedVariable.key,
-            description: VariableStore.state.selectedVariable.description
+            description: VariableStore.state.selectedVariable.description,
+            devices: DeviceStore.state.allDevices
         })
     }
     handleInfo = (target) => {
@@ -152,7 +148,7 @@ export default class VarInfo extends React.Component {
                         <div style={styles.devicesContainer}>
                             <Card>
                                 <List style={{textAlign: 'left'}}>
-                                    {devices.map((device) => (
+                                    {this.state.devices.map((device) => (
                                         <div key={device.key}>
                                             <ListItem
                                                 primaryText={device.name}

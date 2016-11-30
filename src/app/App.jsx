@@ -14,6 +14,7 @@ injectTapEventPlugin();
 // Init Stores
 import LoginStore from 'app/stores/LoginStore';
 import VariableStore from 'app/stores/VariableStore';
+import DeviceStore from 'app/stores/DeviceStore';
 
 
 ReactDOM.render(<AppRouter/>, document.getElementById('app'));
