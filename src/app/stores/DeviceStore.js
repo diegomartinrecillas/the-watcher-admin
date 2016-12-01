@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Store from 'app/libs/Store';
 import DeviceActions from 'app/actions/DeviceActions';
+import {domain} from 'app/AppConstants';
 
 const DeviceStore = new (class extends Store {
     constructor() {
@@ -12,20 +13,24 @@ const DeviceStore = new (class extends Store {
             isAddingDevice: false,
             isAddingDeviceSuccess: false,
             isAddingDeviceError: false,
-            addingDeviceErrorMessage: ''
+            addingDeviceErrorMessage: '',
+            deviceKey: ''
         }
 
-        this.listenTo(DeviceActions['getAllDevices'], this.getAllDevices);
-        this.listenTo(DeviceActions['getDevice'], this.getDevice);
-        this.listenTo(DeviceActions['addNewDevice'], this.addNewDevice);
-        this.listenTo(DeviceActions['resetAddDevice'], this.resetAddDevice);
-        this.listenTo(DeviceActions['resetSelectedDevice'], this.resetSelectedDevice);
+        this.listenTo([
+            { action: DeviceActions['getAllDevices'], callback: this.getAllDevices },
+            { action: DeviceActions['getDevice'], callback: this.getDevice },
+            { action: DeviceActions['addNewDevice'], callback: this.addNewDevice },
+            { action: DeviceActions['resetAddDevice'], callback: this.resetAddDevice },
+            { action: DeviceActions['resetSelectedDevice'], callback: this.resetSelectedDevice },
+            { action: DeviceActions['deleteDevice'], callback: this.deleteDevice }
+        ]);
     }
 
     getAllDevices = (key) => {
         $.ajax({
             method: "GET",
-            url: `http://172.16.90.89:3000/devices/${key}`,
+            url: `${domain}/devices/${key}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: (data, textStatus, jqXHR) => {
@@ -75,27 +80,29 @@ const DeviceStore = new (class extends Store {
                 'descripcion': deviceDescription
             }
         }
-        console.log(request);
         // Request Launch State
         this.setState({
             isAddingDevice: true,
             isAddingDeviceSuccess: false,
             isAddingDeviceError: false,
-            addingDeviceErrorMessage: ''
+            addingDeviceErrorMessage: '',
+            deviceKey: ''
         });
 
         $.ajax({
             type: "POST",
-            url: `http://172.16.90.89:3000/device`,
+            url: `${domain}/device`,
             data: JSON.stringify(request),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: (data, textStatus, jqXHR) => {
+                let deviceKey = data.payload.deviceKey;
                 this.setState({
                     isAddingDevice: false,
                     isAddingDeviceSuccess: true,
                     isAddingDeviceError: false,
-                    addingDeviceErrorMessage: ''
+                    addingDeviceErrorMessage: '',
+                    deviceKey: `Key: ${deviceKey}`
                 });
             },
             error: (jqXHR, textStatus, errorThrown) => {
@@ -104,11 +111,16 @@ const DeviceStore = new (class extends Store {
                     isAddingDevice: false,
                     isAddingDeviceSuccess: false,
                     isAddingDeviceError: true,
-                    addingDeviceErrorMessage: 'Something happened'
+                    addingDeviceErrorMessage: 'Ocurrió un error, intenta más tarde',
+                    deviceKey: ''
                 });
             }
         });
 
+    }
+
+    deleteDevice = () => {
+        console.log(`should delete ${this.state.selectedDevice.key}`);
     }
 
     resetAddDevice = () => {
@@ -116,7 +128,8 @@ const DeviceStore = new (class extends Store {
             isAddingDevice: false,
             isAddingDeviceSuccess: false,
             isAddingDeviceError: false,
-            addingDeviceErrorMessage: ''
+            addingDeviceErrorMessage: '',
+            deviceKey: ''
         });
     }
 });

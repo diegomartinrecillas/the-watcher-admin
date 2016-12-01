@@ -17,12 +17,14 @@ const LoginStore =  new (class extends Store {
             loginErrorMessage: ''
         };
 
-        this.listenTo(LoginActions.checkLoggedIn, this.checkLoggedIn);
-        this.listenTo(LoginActions.loginWithEmail, this.loginWithEmail);
-        this.listenTo(LoginActions.loginWithFacebook, this.loginWithFacebook);
-        this.listenTo(LoginActions.loginWithGoogle, this.loginWithGoogle);
-        this.listenTo(LoginActions.logout, this.logout);
-        this.listenTo(LoginActions.resetError, this.resetError);
+        this.listenTo([
+            { action: LoginActions['checkLoggedIn'], callback: this.checkLoggedIn },
+            { action: LoginActions['loginWithEmail'], callback: this.loginWithEmail },
+            { action: LoginActions['loginWithFacebook'], callback: this.loginWithFacebook },
+            { action: LoginActions['loginWithGoogle'], callback: this.loginWithGoogle },
+            { action: LoginActions['logout'], callback: this.logout },
+            { action: LoginActions['resetError'], callback: this.resetError }
+        ]);
     }
 
     logout = () => {

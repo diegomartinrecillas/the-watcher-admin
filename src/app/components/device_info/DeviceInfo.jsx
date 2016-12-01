@@ -3,6 +3,8 @@ import DeviceStore from 'app/stores/DeviceStore';
 // React
 import React from 'react';
 // Material UI Components
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Info from 'material-ui/svg-icons/action/info';
 import Divider from 'material-ui/Divider';
@@ -33,7 +35,7 @@ const styles = {
     },
     button: {
         margin: 12,
-        width: 150,
+        width: 190,
         height: 50
     },
     alignment: {
@@ -63,6 +65,7 @@ export default class Device extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            dialogOpen: false,
             name: '',
             key: '',
             description: ''
@@ -85,43 +88,91 @@ export default class Device extends React.Component {
             description: DeviceStore.state.selectedDevice.description
         })
     }
+
+    handleDeleteDevice = () => {
+        DeviceActions.dispatch('deleteDevice');
+    }
+
+    handleDialogOpen = () => {
+        this.setState({
+            dialogOpen: true
+        });
+    }
+
+    handleDialogClose = () => {
+        this.setState({
+            dialogOpen: false
+        });
+    }
+
     render() {
+        const actions = [
+            <FlatButton
+                label="Cancelear"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={this.handleDialogClose}
+                />,
+            <FlatButton
+                label="Borrar"
+                primary={true}
+                onTouchTap={this.handleDeleteDevice}
+                />,
+        ];
+        const dialogText = `¿Estas seguro de que quieres borrar el dispositivo "${this.state.name}"?`;
         return (
-            <div style={styles.mainContainer}>
-                <div style={styles.innerContainer}>
-                    <Subtitle text="Dispositivo"/>
-                    <div style={styles.dataContainer}>
-                        <Card style={styles.alignment}>
-                            <section style={styles.legend}>
-                                <span style={styles.title}>
-                                    Nombre
-                                </span>
-                                <br/>
-                                <span style={styles.entry}>
-                                    {this.state.name}
-                                </span>
-                            </section>
-                            <Divider/>
-                            <section style={styles.legend}>
-                                <span style={styles.title}>
-                                    Device Key
-                                </span>
-                                <br/>
-                                <span style={styles.entry}>
-                                    {this.state.key}
-                                </span>
-                            </section>
-                            <Divider/>
-                            <section style={styles.legend}>
-                                <span style={styles.title}>
-                                    Descripción
-                                </span>
-                                <br/>
-                                <span style={styles.entry}>
-                                    {this.state.description}
-                                </span>
-                            </section>
-                        </Card>
+            <div>
+                <Dialog
+                    title="Borrar Dispositivo"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.dialogOpen}
+                    onRequestClose={this.handleDialogClose}
+                    >
+                    {dialogText}
+                </Dialog>
+                <div style={styles.mainContainer}>
+                    <div style={styles.innerContainer}>
+                        <Subtitle text="Dispositivo"/>
+                        <div style={styles.dataContainer}>
+                            <Card style={styles.alignment}>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Nombre
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.name}
+                                    </span>
+                                </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Device Key
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.key}
+                                    </span>
+                                </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Descripción
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.description}
+                                    </span>
+                                </section>
+                            </Card>
+                        </div>
+                        <RaisedButton
+                            label="Borrar dispositivo"
+                            primary={true}
+                            style={styles.button}
+                            onClick={this.handleDialogOpen}
+                            />
                     </div>
                 </div>
             </div>

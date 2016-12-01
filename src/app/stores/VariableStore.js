@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Store from 'app/libs/Store';
 import VariableActions from 'app/actions/VariableActions';
+import {domain} from 'app/AppConstants';
 
 const VariableStore = new (class extends Store {
     constructor() {
@@ -16,16 +17,19 @@ const VariableStore = new (class extends Store {
             varKey: ''
         }
 
-        this.listenTo(VariableActions['getAllVariables'], this.getAllVariables);
-        this.listenTo(VariableActions['getVariable'], this.getVariable);
-        this.listenTo(VariableActions['addNewVariable'], this.addNewVariable);
-        this.listenTo(VariableActions['resetAddVar'], this.resetAddVar);
+        this.listenTo([
+            { action: VariableActions['getAllVariables'], callback: this.getAllVariables },
+            { action: VariableActions['getVariable'], callback: this.getVariable },
+            { action: VariableActions['addNewVariable'], callback: this.addNewVariable },
+            { action: VariableActions['resetAddVar'], callback: this.resetAddVar },
+            { action: VariableActions['deleteVar'], callback: this.deleteVar }
+        ]);
     }
 
     getAllVariables = () => {
         $.ajax({
             method: "GET",
-            url: "http://172.16.90.89:3000/variables",
+            url: `${domain}/variables`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: (data, textStatus, jqXHR) => {
@@ -37,7 +41,6 @@ const VariableStore = new (class extends Store {
                     variable.zone = object.lugar;
                     variable.description = object.descripcion;
                     variable.timezone = object.timezoneOffset;
-
                     variables.push(variable);
                 }
                 this.setState({
@@ -84,7 +87,7 @@ const VariableStore = new (class extends Store {
 
         $.ajax({
             type: "POST",
-            url: "http://172.16.90.89:3000/variable",
+            url: `${domain}/variable`,
             data: JSON.stringify(request),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -95,7 +98,7 @@ const VariableStore = new (class extends Store {
                     isAddingVarSuccess: true,
                     isAddingVarError: false,
                     addingVarErrorMessage: '',
-                    varKey: `Key: varKey`
+                    varKey: `Key: ${varKey}`
                 });
             },
             error: (jqXHR, textStatus, errorThrown) => {
@@ -104,7 +107,7 @@ const VariableStore = new (class extends Store {
                     isAddingVar: false,
                     isAddingVarSuccess: false,
                     isAddingVarError: true,
-                    addingVarErrorMessage: `Error: ${errorThrown}`,
+                    addingVarErrorMessage: `Ocurrió un error, intenta más tarde`,
                     varKey: ''
                 });
             }
@@ -120,6 +123,10 @@ const VariableStore = new (class extends Store {
             addingVarErrorMessage: '',
             varKey: ''
         });
+    }
+
+    deleteVar = () => {
+        console.log(`should delete ${this.state.selectedVariable.key}`);
     }
 });
 

@@ -6,7 +6,8 @@ const VariableActions = createActions([
     'addNewVariable',
     'resetAddVar',
     'getAllVariables',
-    'getVariable'
+    'getVariable',
+    'deleteVar'
 ], DEBUG);
 
 export default VariableActions;

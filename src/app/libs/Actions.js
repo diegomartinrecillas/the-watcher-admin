@@ -64,7 +64,7 @@ const createActions = (arr, DEBUG = false) => {
     let actions = {};
     for (let item of arr) {
         if (item == 'dispatch') {
-            throw `ACTION: dispatch is a reserved word, use another Action name.`
+            throw `CREATE_ACTIONS: dispatch is a reserved word, use another ACTION identifier.`
         }
         actions[item] = new Action(item, DEBUG);
     }

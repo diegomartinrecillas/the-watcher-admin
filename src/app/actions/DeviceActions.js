@@ -7,7 +7,8 @@ const DeviceActions = createActions([
     'resetAddDevice',
     'resetSelectedDevice',
     'getAllDevices',
-    'getDevice'
+    'getDevice',
+    'deleteDevice'
 ], DEBUG);
 
 export default DeviceActions;

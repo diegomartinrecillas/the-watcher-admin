@@ -54,6 +54,7 @@ const styles = {
     isAddingVar:{},
     addingVarErrorMessage: {},
     isAddingVarSuccess: {},
+    deviceKey: {}
 }
 
 export default class AddDevice extends React.Component {
@@ -86,7 +87,8 @@ export default class AddDevice extends React.Component {
             isAddingDevice: DeviceStore.state.isAddingDevice,
             isAddingDeviceError: DeviceStore.state.isAddingDeviceError,
             addingDeviceErrorMessage: DeviceStore.state.addingDeviceErrorMessage,
-            isAddingDeviceSuccess: DeviceStore.state.isAddingDeviceSuccess
+            isAddingDeviceSuccess: DeviceStore.state.isAddingDeviceSuccess,
+            deviceKey: DeviceStore.state.deviceKey
         });
     }
 
@@ -167,7 +169,12 @@ export default class AddDevice extends React.Component {
                         }
                         {this.state.isAddingDeviceSuccess &&
                             <section>
-                                <p style={styles.isAddingDeviceSuccess}>Nueva dispositivo agregado con éxito</p>
+                                <p style={styles.isAddingDeviceSuccess}>Nuevo dispositivo agregado con éxito</p>
+                            </section>
+                        }
+                        {this.state.isAddingDeviceSuccess &&
+                            <section>
+                                <p style={styles.deviceKey}>{this.state.deviceKey}</p>
                             </section>
                         }
                         <RaisedButton

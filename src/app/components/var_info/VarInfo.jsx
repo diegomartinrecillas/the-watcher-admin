@@ -7,7 +7,9 @@ import React from 'react';
 // React Router
 import { hashHistory } from 'react-router'
 // Material UI Components
+import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
 import Info from 'material-ui/svg-icons/action/info';
@@ -68,6 +70,7 @@ export default class VarInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            dialogOpen: false,
             name: '',
             key: '',
             description: '',
@@ -79,7 +82,7 @@ export default class VarInfo extends React.Component {
         VariableStore.subscribe(this._onChange);
         VariableActions.dispatch('getVariable', this.props.params.varKey);
         DeviceStore.subscribe(this._onChange);
-        DeviceActions.dispatch('resetSelectedDevice');    
+        DeviceActions.dispatch('resetSelectedDevice');
         DeviceActions.dispatch('getAllDevices', this.props.params.varKey);
     }
 
@@ -105,9 +108,48 @@ export default class VarInfo extends React.Component {
         hashHistory.push(`/app/addDevice/${target}`);
     }
 
+    handleDeleteVar = () => {
+        VariableActions.dispatch('deleteVar');
+    }
+
+    handleDialogOpen = () => {
+        this.setState({
+            dialogOpen: true
+        });
+    }
+
+    handleDialogClose = () => {
+        this.setState({
+            dialogOpen: false
+        });
+    }
+
     render() {
+        const actions = [
+            <FlatButton
+                label="Cancelear"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={this.handleDialogClose}
+                />,
+            <FlatButton
+                label="Borrar"
+                primary={true}
+                onTouchTap={this.handleDeleteVar}
+                />,
+        ];
+        const dialogText = `¿Estas seguro de que quieres borrar la variable "${this.state.name}"?`;
         return (
             <div>
+                <Dialog
+                    title="Borrar Variable"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.dialogOpen}
+                    onRequestClose={this.handleDialogClose}
+                    >
+                    {dialogText}
+                </Dialog>
                 <div style={styles.mainContainer}>
                     <div style={styles.innerContainer}>
                         <Subtitle text="Variable"/>
@@ -143,6 +185,12 @@ export default class VarInfo extends React.Component {
                                     </span>
                                 </section>
                             </Card>
+                            <RaisedButton
+                                label="Borrar Variable"
+                                primary={true}
+                                style={styles.button}
+                                onClick={this.handleDialogOpen}
+                                />
                         </div>
                         <Subtitle text="Dispositivos"/>
                         <div style={styles.devicesContainer}>

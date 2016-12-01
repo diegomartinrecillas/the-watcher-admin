@@ -25,11 +25,20 @@ export default class Store extends EventEmitter{
 
     /**
     * Starts listening to an Action's dispatch event and binds a callback to it.
-    * @param {object} action - The Action we will listen to.
-    * @param {callback} callback - The callback we will bind to the Action.
+    * @param {array} actionCallback - The array of Actions - Callbacks we will listen to.
     */
-    listenTo(action, callback) {
-        action.on(ACTION_DISPATCH_EVENT, callback);
+    listenTo(actionCallback) {
+        if (arguments.length === 1 &&  Array.isArray(arguments[0])) {
+            for (let pair of arguments[0]) {
+                if (typeof pair.callback === 'function') {
+                    pair.action.on(ACTION_DISPATCH_EVENT, pair.callback);
+                } else {
+                    throw `Store.listenTo: Action's callback must be a function.`
+                }
+            }
+        } else {
+            throw `Store.listenTo: Bad arguments error, expected 1 array of objects { action, callback }.`
+        }
     }
 
     /**
@@ -47,7 +56,7 @@ export default class Store extends EventEmitter{
     */
     subscribe(callback) {
         this.addListener(STORE_CHANGE_EVENT, callback);
-        this._log(`STORE [${this.name}]: a callback has subscribed`);
+        this._log(`${this.name}.subscribe: \n${callback}`);
     }
 
     /**
@@ -56,7 +65,7 @@ export default class Store extends EventEmitter{
     */
     unsubscribe(callback) {
         this.removeListener(STORE_CHANGE_EVENT, callback);
-        this._log(`STORE [${this.name}]: a callback has unsubscribed`);
+        this._log(`${this.name}.unsubscribe: \n${callback}`);
     }
 
     /**
