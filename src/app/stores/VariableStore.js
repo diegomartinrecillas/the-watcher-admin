@@ -73,7 +73,7 @@ const VariableStore = new (class extends Store {
                 'unidad': varUnit,
                 'descripcion': varDescription,
                 'foto_url': '',
-                'timezoneOffset': 360
+                'timezone': varTimezone
             }
         }
         // Request Launch State
@@ -107,7 +107,7 @@ const VariableStore = new (class extends Store {
                     isAddingVar: false,
                     isAddingVarSuccess: false,
                     isAddingVarError: true,
-                    addingVarErrorMessage: `Ocurrió un error, intenta más tarde`,
+                    addingVarErrorMessage: `No se pudo agregar la nueva variable, por favor intenta más tarde`,
                     varKey: ''
                 });
             }

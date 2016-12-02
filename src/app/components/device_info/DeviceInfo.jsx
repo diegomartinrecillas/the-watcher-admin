@@ -68,7 +68,8 @@ export default class Device extends React.Component {
             dialogOpen: false,
             name: '',
             key: '',
-            description: ''
+            description: '',
+            zone: ''
         }
     }
 
@@ -85,7 +86,8 @@ export default class Device extends React.Component {
         this.setState({
             name: DeviceStore.state.selectedDevice.name,
             key: DeviceStore.state.selectedDevice.key,
-            description: DeviceStore.state.selectedDevice.description
+            description: DeviceStore.state.selectedDevice.description,
+            zone: DeviceStore.state.selectedDevice.zone
         })
     }
 
@@ -115,7 +117,7 @@ export default class Device extends React.Component {
                 />,
             <FlatButton
                 label="Borrar"
-                primary={true}
+                secondary={true}
                 onTouchTap={this.handleDeleteDevice}
                 />,
         ];
@@ -165,11 +167,21 @@ export default class Device extends React.Component {
                                         {this.state.description}
                                     </span>
                                 </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Zona
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.zone}
+                                    </span>
+                                </section>
                             </Card>
                         </div>
                         <RaisedButton
                             label="Borrar dispositivo"
-                            primary={true}
+                            secondary={true}
                             style={styles.button}
                             onClick={this.handleDialogOpen}
                             />

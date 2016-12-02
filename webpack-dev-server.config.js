@@ -36,7 +36,7 @@ const config = {
         ], path.resolve(__dirname, 'src'))
     ],
     resolve: {
-        extensions: ['', '.js', '.jsx'],
+        extensions: ['', '.js', '.jsx', '.json'],
         root: path.resolve('./src')
     },
     module: {

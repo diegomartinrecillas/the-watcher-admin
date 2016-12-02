@@ -41,7 +41,6 @@ const DeviceStore = new (class extends Store {
                     device.name = object.nombre;
                     device.zone = object.lugar;
                     device.description = object.descripcion;
-                    device.timezone = object.timezoneOffset;
                     devices.push(device);
                 }
                 this.setState({

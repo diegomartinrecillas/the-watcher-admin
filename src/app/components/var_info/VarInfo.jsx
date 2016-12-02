@@ -134,7 +134,7 @@ export default class VarInfo extends React.Component {
                 />,
             <FlatButton
                 label="Borrar"
-                primary={true}
+                secondary={true}
                 onTouchTap={this.handleDeleteVar}
                 />,
         ];
@@ -187,7 +187,7 @@ export default class VarInfo extends React.Component {
                             </Card>
                             <RaisedButton
                                 label="Borrar Variable"
-                                primary={true}
+                                secondary={true}
                                 style={styles.button}
                                 onClick={this.handleDialogOpen}
                                 />
