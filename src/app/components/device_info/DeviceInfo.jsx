@@ -92,7 +92,7 @@ export default class Device extends React.Component {
     }
 
     handleDeleteDevice = () => {
-        DeviceActions.dispatch('deleteDevice');
+        DeviceActions.dispatch('deleteDevice', this.state.key);
     }
 
     handleDialogOpen = () => {
@@ -150,7 +150,7 @@ export default class Device extends React.Component {
                                 <Divider/>
                                 <section style={styles.legend}>
                                     <span style={styles.title}>
-                                        Device Key
+                                        Llave
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
@@ -170,7 +170,7 @@ export default class Device extends React.Component {
                                 <Divider/>
                                 <section style={styles.legend}>
                                     <span style={styles.title}>
-                                        Zona
+                                        Lugar
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>

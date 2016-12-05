@@ -1,3 +1,5 @@
+// React Router
+import {hashHistory} from 'react-router';
 // React
 import React from 'react';
 // Flux
@@ -5,6 +7,8 @@ import linkState from 'app/utils/onChangeHandlerFactory';
 import DeviceActions from 'app/actions/DeviceActions';
 import DeviceStore from 'app/stores/DeviceStore';
 // Material UI Components
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -61,6 +65,8 @@ export default class AddDevice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            open: false,
+            errorMessage: '',
             key: '',
             selectValue: null,
             deviceName: '',
@@ -96,8 +102,8 @@ export default class AddDevice extends React.Component {
         event.preventDefault();
 
         if (this.state.deviceName !== '' &&
-            this.state.deviceZone !== '' &&
-            this.state.deviceDescription !== '') {
+        this.state.deviceZone !== '' &&
+        this.state.deviceDescription !== '') {
 
             let data = {};
             data.varKey = this.props.params.varKey;
@@ -106,10 +112,24 @@ export default class AddDevice extends React.Component {
             data.deviceZone = this.state.deviceZone;
             DeviceActions.dispatch('addNewDevice', data);
         } else {
-            //alert('Por favor llena todos los campos');
+            this.handleOpen('Por favor asegúrate de que todos los campos esten llenos.');
         }
 
         return false;
+    }
+
+    handleOpen = (error) => {
+        this.setState({
+            open: true,
+            errorMessage: error
+        });
+    }
+
+    handleClose = () => {
+        this.setState({
+            open: false,
+            errorMessage: ''
+        });
     }
 
     handleSelect = (event, index, selectValue) => {
@@ -118,73 +138,105 @@ export default class AddDevice extends React.Component {
         });
     }
 
+    goBack = () => {
+        hashHistory.push(`/app/home`);
+    }
+
     render() {
+        const actions = [
+            <FlatButton
+                label="Ok"
+                primary={true}
+                onTouchTap={this.handleClose}
+                />
+        ];
         return (
-            <div style={styles.mainContainer}>
-                <div style={styles.innerContainer}>
-                    <Subtitle text='Nuevo Dispositivo'/>
-                    <form>
-                        <div style={styles.dataContainer}>
-                            <Card style={styles.alignment}>
-                                <section style={styles.legend}>
-                                    <TextField
-                                        floatingLabelText="Nombre"
-                                        hintText="Nombre del dispositivo"
-                                        underlineStyle={styles.underlineStyle}
-                                        fullWidth={true}
-                                        value={this.state.deviceName}
-                                        onChange={linkState(this,'deviceName')}/>
+            <div>
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}>
+                    {this.state.errorMessage}
+                </Dialog>
+
+                <div style={styles.mainContainer}>
+                    <div style={styles.innerContainer}>
+                        <Subtitle text='Nuevo Dispositivo'/>
+                        <form>
+                            <div style={styles.dataContainer}>
+                                <Card style={styles.alignment}>
+                                    <section style={styles.legend}>
+                                        <TextField
+                                            floatingLabelText="Nombre"
+                                            hintText="Nombre del dispositivo"
+                                            underlineStyle={styles.underlineStyle}
+                                            fullWidth={true}
+                                            value={this.state.deviceName}
+                                            onChange={linkState(this,'deviceName')}/>
+                                    </section>
+                                    <Divider/>
+                                    <section style={styles.legend}>
+                                        <TextField
+                                            floatingLabelText="Descripción"
+                                            hintText="Descripción del dispositivo"
+                                            underlineStyle={styles.underlineStyle}
+                                            fullWidth={true}
+                                            value={this.state.deviceDescription}
+                                            onChange={linkState(this,'deviceDescription')}/>
+                                    </section>
+                                    <Divider/>
+                                    <section style={styles.legend}>
+                                        <TextField
+                                            floatingLabelText="Lugar"
+                                            hintText="Lugar donde se encuentra el dispositivo"
+                                            underlineStyle={styles.underlineStyle}
+                                            fullWidth={true}
+                                            value={this.state.deviceZone}
+                                            onChange={linkState(this,'deviceZone')}/>
+                                    </section>
+                                </Card>
+                            </div>
+                            {this.state.isAddingDevice &&
+                                <section>
+                                    <p style={styles.isAddingDevice}>Espere un momento...</p>
                                 </section>
-                                <Divider/>
-                                <section style={styles.legend}>
-                                    <TextField
-                                        floatingLabelText="Descripción"
-                                        hintText="Descripción del dispositivo"
-                                        underlineStyle={styles.underlineStyle}
-                                        fullWidth={true}
-                                        value={this.state.deviceDescription}
-                                        onChange={linkState(this,'deviceDescription')}/>
+                            }
+                            {this.state.isAddingDeviceError &&
+                                <section>
+                                    <p style={styles.addingDeviceErrorMessage}>{this.state.addingDeviceErrorMessage}</p>
                                 </section>
-                                <Divider/>
-                                <section style={styles.legend}>
-                                    <TextField
-                                        floatingLabelText="Zona"
-                                        hintText="Zona del dispositivo"
-                                        underlineStyle={styles.underlineStyle}
-                                        fullWidth={true}
-                                        value={this.state.deviceZone}
-                                        onChange={linkState(this,'deviceZone')}/>
+                            }
+                            {this.state.isAddingDeviceSuccess &&
+                                <section>
+                                    <p style={styles.isAddingDeviceSuccess}>Nuevo dispositivo agregado con éxito</p>
                                 </section>
-                            </Card>
-                        </div>
-                        {this.state.isAddingDevice &&
-                            <section>
-                                <p style={styles.isAddingDevice}>Espere un momento...</p>
-                            </section>
-                        }
-                        {this.state.isAddingDeviceError &&
-                            <section>
-                                <p style={styles.addingDeviceErrorMessage}>{this.state.addingDeviceErrorMessage}</p>
-                            </section>
-                        }
-                        {this.state.isAddingDeviceSuccess &&
-                            <section>
-                                <p style={styles.isAddingDeviceSuccess}>Nuevo dispositivo agregado con éxito</p>
-                            </section>
-                        }
-                        {this.state.isAddingDeviceSuccess &&
-                            <section>
-                                <p style={styles.deviceKey}>{this.state.deviceKey}</p>
-                            </section>
-                        }
-                        <RaisedButton
-                            type="submit"
-                            label="Agregar"
-                            primary={true}
-                            style={styles.button}
-                            onClick={this.handleSubmit}
-                            />
-                    </form>
+                            }
+                            {this.state.isAddingDeviceSuccess &&
+                                <section>
+                                    <p style={styles.deviceKey}>{this.state.deviceKey}</p>
+                                </section>
+                            }
+                            {!this.state.isAddingDeviceSuccess &&
+                                <RaisedButton
+                                    type="submit"
+                                    label="Agregar"
+                                    primary={true}
+                                    style={styles.button}
+                                    onClick={this.handleSubmit}
+                                    />
+                            }
+                            {this.state.isAddingDeviceSuccess &&
+                                <RaisedButton
+                                    type="submit"
+                                    label="Listo"
+                                    primary={true}
+                                    style={styles.button}
+                                    onClick={this.goBack}
+                                    />
+                            }
+                        </form>
+                    </div>
                 </div>
             </div>
         );

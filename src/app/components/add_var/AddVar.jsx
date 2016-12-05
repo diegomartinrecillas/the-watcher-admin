@@ -1,6 +1,8 @@
 import timezone from 'moment-timezone';
 // React
 import React from 'react';
+// React Router
+import {hashHistory} from 'react-router';
 // Flux
 import linkState from 'app/utils/onChangeHandlerFactory';
 import VariableActions from 'app/actions/VariableActions';
@@ -67,6 +69,7 @@ export default class AddVar extends React.Component {
             open: false,
             varKey: '',
             varName: '',
+            varType: '',
             varUnit: '',
             varDescription: '',
             varZone: '',
@@ -99,13 +102,14 @@ export default class AddVar extends React.Component {
     }
 
     handleSubmit = (event) => {
+        // Prevent <form/> default submit
         event.preventDefault();
-
         if (this.state.varName !== '' && this.state.varUnit !== '' && this.state.varZone !== '' && this.state.varDescription !== '') {
             if (timezone.tz.names().indexOf(this.state.varTimezone) !== -1) {
                 let data = {};
                 data.varName = this.state.varName;
                 data.varUnit = this.state.varUnit;
+                data.varType = this.state.varType;
                 data.varDescription = this.state.varDescription;
                 data.varZone = this.state.varZone;
                 data.varTimezone = this.state.varTimezone;
@@ -113,10 +117,10 @@ export default class AddVar extends React.Component {
             } else {
                 this.handleOpen('La zona horaria que seleccionaste no es válida, por favor selecciona una zona de la lista.');
             }
-        }
-        else {
+        } else {
             this.handleOpen('Por favor asegúrate de que todos los campos esten llenos.');
         }
+        // Prevent <form/> default submit
         return false;
     }
 
@@ -138,6 +142,10 @@ export default class AddVar extends React.Component {
         this.setState({
             varTimezone: value
         });
+    }
+
+    goBack = () => {
+        hashHistory.push(`/app/home`);
     }
 
     render() {
@@ -174,6 +182,17 @@ export default class AddVar extends React.Component {
                                             onChange={linkState(this,'varName')}/>
                                     </section>
                                     <Divider/>
+                                        <section style={styles.legend}>
+                                            <TextField
+                                                required={true}
+                                                floatingLabelText="Tipo"
+                                                hintText="Tipo de la variable"
+                                                underlineStyle={styles.underlineStyle}
+                                                fullWidth={true}
+                                                value={this.state.varType}
+                                                onChange={linkState(this,'varType')}/>
+                                        </section>
+                                        <Divider/>
                                     <section style={styles.legend}>
                                         <TextField
                                             required={true}
@@ -212,7 +231,7 @@ export default class AddVar extends React.Component {
                                             required={true}
                                             fullWidth={true}
                                             underlineStyle={styles.underlineStyle}
-                                            filter={AutoComplete.caseInsensitiveFilter}
+                                            filter={AutoComplete.fuzzyFilter}
                                             floatingLabelText="Timezone"
                                             hintText="Timezone"
                                             onUpdateInput={this.handleTimezone}

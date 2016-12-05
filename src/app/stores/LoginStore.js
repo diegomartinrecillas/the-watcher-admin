@@ -5,7 +5,7 @@ import LoginActions from 'app/actions/LoginActions';
 import firebase from 'firebase';
 import { firebaseAuth } from 'app/firebase/firebase';
 
-const LoginStore =  new (class extends Store {
+const LoginStore = new (class extends Store {
     constructor() {
         super('LOGIN_STORE');
 
@@ -122,9 +122,9 @@ const LoginStore =  new (class extends Store {
         if (error.code == "auth/network-request-failed") {
             errorMsg = 'No hay conexión a Internet';
         } else if (error.code == "auth/user-not-found") {
-            errorMsg = 'Usuario y/o contreseña incorrectos';
+            errorMsg = 'Usuario y/o contraseña incorrectos';
         } else if (error.code == "auth/wrong-password") {
-            errorMsg = 'Usuario y/o contreseña incorrectos';
+            errorMsg = 'Usuario y/o contraseña incorrectos';
         } else if (error.code = "auth/user-disabled") {
             errorMsg = 'Tu cuenta ha sido dada de baja, por favor ponte en contacto con tu administrador'
         } else {

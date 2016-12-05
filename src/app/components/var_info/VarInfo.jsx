@@ -71,9 +71,13 @@ export default class VarInfo extends React.Component {
         super(props);
         this.state = {
             dialogOpen: false,
-            name: '',
-            key: '',
-            description: '',
+            varName: '',
+            varKey: '',
+            varType: '',
+            varUnit: '',
+            varDescription: '',
+            varZone: '',
+            varTimezone: '',
             devices: []
         }
     }
@@ -93,9 +97,13 @@ export default class VarInfo extends React.Component {
 
     _onChange = () => {
         this.setState({
-            name: VariableStore.state.selectedVariable.name,
-            key: VariableStore.state.selectedVariable.key,
-            description: VariableStore.state.selectedVariable.description,
+            varName: VariableStore.state.selectedVariable.name,
+            varKey: VariableStore.state.selectedVariable.key,
+            varType: VariableStore.state.selectedVariable.type,
+            varUnit: VariableStore.state.selectedVariable.unit,
+            varDescription: VariableStore.state.selectedVariable.description,
+            varZone: VariableStore.state.selectedVariable.zone,
+            varTimezone: VariableStore.state.selectedVariable.timezone,
             devices: DeviceStore.state.allDevices
         })
     }
@@ -109,7 +117,7 @@ export default class VarInfo extends React.Component {
     }
 
     handleDeleteVar = () => {
-        VariableActions.dispatch('deleteVar');
+        VariableActions.dispatch('deleteVar', this.state.varKey);
     }
 
     handleDialogOpen = () => {
@@ -138,7 +146,7 @@ export default class VarInfo extends React.Component {
                 onTouchTap={this.handleDeleteVar}
                 />,
         ];
-        const dialogText = `¿Estas seguro de que quieres borrar la variable "${this.state.name}"?`;
+        const dialogText = `¿Estas seguro de que quieres borrar la variable "${this.state.varName}"?`;
         return (
             <div>
                 <Dialog
@@ -161,17 +169,37 @@ export default class VarInfo extends React.Component {
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
-                                        {this.state.name}
+                                        {this.state.varName}
                                     </span>
                                 </section>
                                 <Divider/>
                                 <section style={styles.legend}>
                                     <span style={styles.title}>
-                                        Variable Key
+                                        Llave
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
-                                        {this.state.key}
+                                        {this.state.varKey}
+                                    </span>
+                                </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Tipo
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.varType}
+                                    </span>
+                                </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Unidad
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.varUnit}
                                     </span>
                                 </section>
                                 <Divider/>
@@ -181,7 +209,27 @@ export default class VarInfo extends React.Component {
                                     </span>
                                     <br/>
                                     <span style={styles.entry}>
-                                        {this.state.description}
+                                        {this.state.varDescription}
+                                    </span>
+                                </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Zona
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.varZone}
+                                    </span>
+                                </section>
+                                <Divider/>
+                                <section style={styles.legend}>
+                                    <span style={styles.title}>
+                                        Timezone
+                                    </span>
+                                    <br/>
+                                    <span style={styles.entry}>
+                                        {this.state.varTimezone}
                                     </span>
                                 </section>
                             </Card>

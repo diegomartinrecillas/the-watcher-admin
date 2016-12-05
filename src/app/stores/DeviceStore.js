@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Store from 'app/libs/Store';
 import DeviceActions from 'app/actions/DeviceActions';
 import {domain} from 'app/AppConstants';
+import {hashHistory} from 'react-router';
 
 const DeviceStore = new (class extends Store {
     constructor() {
@@ -118,8 +119,20 @@ const DeviceStore = new (class extends Store {
 
     }
 
-    deleteDevice = () => {
-        console.log(`should delete ${this.state.selectedDevice.key}`);
+    deleteDevice = (key) => {
+        console.log(`should delete ${key}`);
+        $.ajax({
+            method: "DELETE",
+            url: `${domain}/device/${key}`,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: (data, textStatus, jqXHR) => {
+                hashHistory.push(`/app/home`);
+            },
+            error: (jqXHR, textStatus, errorThrown) => {
+                console.log('Failure ' + errorThrown);
+            }
+        });
     }
 
     resetAddDevice = () => {
